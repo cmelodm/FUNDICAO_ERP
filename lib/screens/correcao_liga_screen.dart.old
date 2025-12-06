@@ -1,0 +1,779 @@
+import 'package:flutter/material.dart';
+import 'package:foundry_erp/models/liga_metalurgica_model.dart';
+import 'package:foundry_erp/models/analise_espectrometrica_model.dart';
+import 'package:foundry_erp/services/liga_templates_service.dart';
+import 'package:foundry_erp/services/data_service.dart';
+
+class CorrecaoLigaScreen extends StatefulWidget {
+  const CorrecaoLigaScreen({super.key});
+
+  @override
+  State<CorrecaoLigaScreen> createState() => _CorrecaoLigaScreenState();
+}
+
+class _CorrecaoLigaScreenState extends State<CorrecaoLigaScreen> {
+  final LigaTemplatesService _templatesService = LigaTemplatesService();
+  final DataService _dataService = DataService();
+  
+  LigaTemplate? _ligaSelecionada;
+  final _pesoAtualController = TextEditingController();
+  final _operadorController = TextEditingController();
+  final Map<String, TextEditingController> _controllersEspectrometro = {};
+  
+  AnaliseEspectrometricaModel? _analiseAtual;
+
+  @override
+  void dispose() {
+    _pesoAtualController.dispose();
+    _operadorController.dispose();
+    for (var controller in _controllersEspectrometro.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Correção de Liga'),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Colors.white,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildSelecaoLiga(),
+            if (_ligaSelecionada != null) ...[
+              const SizedBox(height: 24),
+              _buildDadosBasicos(),
+              const SizedBox(height: 24),
+              _buildEspectrometro(),
+              const SizedBox(height: 24),
+              _buildBotaoAnalisar(),
+            ],
+            if (_analiseAtual != null) ...[
+              const SizedBox(height: 24),
+              _buildResultadoAnalise(),
+              const SizedBox(height: 24),
+              _buildCorrecoes(),
+              const SizedBox(height: 24),
+              _buildBotoesAutorizacao(),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSelecaoLiga() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '1. Selecionar Liga',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            DropdownButtonFormField<LigaTemplate>(
+              value: _ligaSelecionada,
+              decoration: const InputDecoration(
+                labelText: 'Liga a Analisar',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.science),
+              ),
+              items: _templatesService.ligasTemplates.map((liga) {
+                return DropdownMenuItem(
+                  value: liga,
+                  child: Text('${liga.codigo} - ${liga.nome}'),
+                );
+              }).toList(),
+              onChanged: (liga) {
+                setState(() {
+                  _ligaSelecionada = liga;
+                  _analiseAtual = null;
+                  _criarControllersEspectrometro();
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _criarControllersEspectrometro() {
+    _controllersEspectrometro.clear();
+    if (_ligaSelecionada != null) {
+      for (var elemento in _ligaSelecionada!.elementos) {
+        _controllersEspectrometro[elemento.simbolo] = TextEditingController();
+      }
+    }
+  }
+
+  Widget _buildDadosBasicos() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '2. Dados do Forno',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _pesoAtualController,
+              decoration: const InputDecoration(
+                labelText: 'Peso Atual no Forno (kg)',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.scale),
+              ),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _operadorController,
+              decoration: const InputDecoration(
+                labelText: 'Operador Responsável',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.person),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEspectrometro() {
+    if (_ligaSelecionada == null) return const SizedBox();
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Expanded(
+                  child: Text(
+                    '3. Análise Espectrométrica',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.info_outline),
+                  onPressed: () => _mostrarInfoRanges(),
+                  tooltip: 'Ver Ranges da Liga',
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Digite os valores medidos pelo espectrômetro:',
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+            const SizedBox(height: 12),
+            ..._ligaSelecionada!.elementos.map((elemento) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${elemento.simbolo} (${elemento.nome})',
+                            style: const TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          Text(
+                            'Range: ${elemento.percentualMinimo.toStringAsFixed(2)}-${elemento.percentualMaximo.toStringAsFixed(2)}%',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: TextField(
+                        controller: _controllersEspectrometro[elemento.simbolo],
+                        decoration: InputDecoration(
+                          labelText: '% Medido',
+                          border: const OutlineInputBorder(),
+                          suffixText: '%',
+                          hintText: elemento.percentualNominal.toStringAsFixed(2),
+                        ),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBotaoAnalisar() {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: _realizarAnalise,
+        icon: const Icon(Icons.analytics),
+        label: const Text('Analisar e Calcular Correções'),
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.all(16),
+        ),
+      ),
+    );
+  }
+
+  void _realizarAnalise() {
+    if (_ligaSelecionada == null) return;
+
+    final pesoAtual = double.tryParse(_pesoAtualController.text) ?? 0;
+    if (pesoAtual <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Informe o peso atual no forno')),
+      );
+      return;
+    }
+
+    final operador = _operadorController.text.trim();
+    if (operador.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Informe o operador responsável')),
+      );
+      return;
+    }
+
+    // Processar leituras do espectrômetro
+    final Map<String, ElementoAnalisado> elementosAnalisados = {};
+    final List<CorrecaoElemento> correcoesNecessarias = [];
+
+    for (var elemento in _ligaSelecionada!.elementos) {
+      final controller = _controllersEspectrometro[elemento.simbolo];
+      final percentualMedido = double.tryParse(controller?.text ?? '');
+
+      if (percentualMedido == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Informe o valor medido para ${elemento.simbolo}'),
+          ),
+        );
+        return;
+      }
+
+      final dentroRange = percentualMedido >= elemento.percentualMinimo &&
+          percentualMedido <= elemento.percentualMaximo;
+      final desvio = percentualMedido - elemento.percentualNominal;
+
+      elementosAnalisados[elemento.simbolo] = ElementoAnalisado(
+        simbolo: elemento.simbolo,
+        nome: elemento.nome,
+        percentualMedido: percentualMedido,
+        percentualMinimo: elemento.percentualMinimo,
+        percentualMaximo: elemento.percentualMaximo,
+        dentroRange: dentroRange,
+        desvio: desvio,
+      );
+
+      // Calcular correção se necessário
+      if (!dentroRange && percentualMedido < elemento.percentualMinimo) {
+        final percentualDesejado = elemento.percentualNominal;
+        final diferencaPercentual = percentualDesejado - percentualMedido;
+        final quantidadeAdicionar = (pesoAtual * diferencaPercentual) / 100;
+
+        correcoesNecessarias.add(CorrecaoElemento(
+          simbolo: elemento.simbolo,
+          nome: elemento.nome,
+          percentualAtual: percentualMedido,
+          percentualDesejado: percentualDesejado,
+          quantidadeAdicionar: quantidadeAdicionar,
+        ));
+      }
+    }
+
+    final StatusAnalise status = elementosAnalisados.values.every((e) => e.dentroRange)
+        ? StatusAnalise.dentroEspecificacao
+        : StatusAnalise.foraEspecificacao;
+
+    setState(() {
+      _analiseAtual = AnaliseEspectrometricaModel(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        ligaId: _ligaSelecionada!.codigo,
+        ligaCodigo: _ligaSelecionada!.codigo,
+        pesoLigaAtual: pesoAtual,
+        dataAnalise: DateTime.now(),
+        operador: operador,
+        elementosAnalisados: elementosAnalisados,
+        status: status,
+        correcoesNecessarias: correcoesNecessarias,
+        autorizado: false,
+      );
+    });
+  }
+
+  Widget _buildResultadoAnalise() {
+    if (_analiseAtual == null) return const SizedBox();
+
+    Color statusColor;
+    switch (_analiseAtual!.status) {
+      case StatusAnalise.dentroEspecificacao:
+        statusColor = Colors.green;
+        break;
+      case StatusAnalise.foraEspecificacao:
+        statusColor = Colors.orange;
+        break;
+      default:
+        statusColor = Colors.grey;
+    }
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  _analiseAtual!.todosElementosDentroRange
+                      ? Icons.check_circle
+                      : Icons.warning,
+                  color: statusColor,
+                  size: 32,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Resultado da Análise',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        _analiseAtual!.status.label,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: statusColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const Divider(height: 24),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey[300]!),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        topRight: Radius.circular(8),
+                      ),
+                    ),
+                    child: Row(
+                      children: const [
+                        Expanded(flex: 2, child: Text('Elemento', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
+                        Expanded(flex: 2, child: Text('Range', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12), textAlign: TextAlign.center)),
+                        Expanded(flex: 2, child: Text('Medido', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12), textAlign: TextAlign.center)),
+                        Expanded(flex: 2, child: Text('Status', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12), textAlign: TextAlign.center)),
+                      ],
+                    ),
+                  ),
+                  ..._analiseAtual!.elementosAnalisados.values.map((elemento) {
+                    return Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(color: Colors.grey[200]!)),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              '${elemento.simbolo} (${elemento.nome})',
+                              style: const TextStyle(fontSize: 11),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              '${elemento.percentualMinimo.toStringAsFixed(2)}-${elemento.percentualMaximo.toStringAsFixed(2)}%',
+                              style: const TextStyle(fontSize: 11),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              '${elemento.percentualMedido.toStringAsFixed(2)}%',
+                              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: elemento.dentroRange
+                                    ? Colors.green.withValues(alpha: 0.2)
+                                    : Colors.orange.withValues(alpha: 0.2),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                elemento.statusTexto,
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: elemento.dentroRange ? Colors.green : Colors.orange,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCorrecoes() {
+    if (_analiseAtual == null || !_analiseAtual!.precisaCorrecao) {
+      return const SizedBox();
+    }
+
+    return Card(
+      color: Colors.orange[50],
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.build, color: Colors.orange[800]),
+                const SizedBox(width: 8),
+                const Text(
+                  'Correções Necessárias',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            ..._analiseAtual!.correcoesNecessarias.map((correcao) {
+              return Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.orange[200]!),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${correcao.simbolo} (${correcao.nome})',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Atual: ${correcao.percentualAtual.toStringAsFixed(2)}%',
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                        const Icon(Icons.arrow_forward, size: 16),
+                        Text(
+                          'Desejado: ${correcao.percentualDesejado.toStringAsFixed(2)}%',
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.orange[100],
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.add_circle, size: 16),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Adicionar ${correcao.quantidadeAdicionar.toStringAsFixed(2)} kg',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBotoesAutorizacao() {
+    if (_analiseAtual == null) return const SizedBox();
+
+    if (_analiseAtual!.todosElementosDentroRange) {
+      return SizedBox(
+        width: double.infinity,
+        child: ElevatedButton.icon(
+          onPressed: () => _autorizarVazamento(),
+          icon: const Icon(Icons.check_circle),
+          label: const Text('AUTORIZAR VAZAMENTO'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.all(16),
+          ),
+        ),
+      );
+    } else {
+      return Row(
+        children: [
+          Expanded(
+            child: OutlinedButton.icon(
+              onPressed: () => _rejeitarLiga(),
+              icon: const Icon(Icons.cancel),
+              label: const Text('REJEITAR'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.red,
+                padding: const EdgeInsets.all(16),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: ElevatedButton.icon(
+              onPressed: () => _aplicarCorrecoes(),
+              icon: const Icon(Icons.build),
+              label: const Text('APLICAR CORREÇÕES'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.all(16),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+  }
+
+  void _autorizarVazamento() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Autorizar Vazamento'),
+        content: const Text(
+          'A liga está dentro das especificações. Deseja autorizar o vazamento?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              setState(() {
+                _analiseAtual = AnaliseEspectrometricaModel(
+                  id: _analiseAtual!.id,
+                  ligaId: _analiseAtual!.ligaId,
+                  ligaCodigo: _analiseAtual!.ligaCodigo,
+                  pesoLigaAtual: _analiseAtual!.pesoLigaAtual,
+                  dataAnalise: _analiseAtual!.dataAnalise,
+                  operador: _analiseAtual!.operador,
+                  elementosAnalisados: _analiseAtual!.elementosAnalisados,
+                  status: StatusAnalise.autorizado,
+                  correcoesNecessarias: _analiseAtual!.correcoesNecessarias,
+                  autorizado: true,
+                  autorizadoPor: 'Sistema', // TODO: Usuário logado
+                  dataAutorizacao: DateTime.now(),
+                );
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('✅ VAZAMENTO AUTORIZADO!'),
+                  backgroundColor: Colors.green,
+                  duration: Duration(seconds: 3),
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+            child: const Text('AUTORIZAR'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _aplicarCorrecoes() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Aplicar Correções'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Adicione os seguintes elementos ao forno:'),
+            const SizedBox(height: 12),
+            ..._analiseAtual!.correcoesNecessarias.map((correcao) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text(
+                  '• ${correcao.simbolo}: ${correcao.quantidadeAdicionar.toStringAsFixed(2)} kg',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              );
+            }),
+            const SizedBox(height: 12),
+            const Text(
+              'Após adicionar os elementos, realize uma nova análise.',
+              style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Fechar'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Correções registradas. Realize nova análise após adicionar os elementos.'),
+                ),
+              );
+            },
+            child: const Text('Entendido'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _rejeitarLiga() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Rejeitar Liga'),
+        content: const Text(
+          'Tem certeza que deseja rejeitar esta liga? Esta ação não pode ser desfeita.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              setState(() {
+                _analiseAtual = null;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Liga rejeitada'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text('REJEITAR'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _mostrarInfoRanges() {
+    if (_ligaSelecionada == null) return;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Ranges - ${_ligaSelecionada!.codigo}'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: _ligaSelecionada!.elementos.map((elemento) {
+              return ListTile(
+                title: Text('${elemento.simbolo} (${elemento.nome})'),
+                subtitle: Text(
+                  'Min: ${elemento.percentualMinimo.toStringAsFixed(2)}%\n'
+                  'Nom: ${elemento.percentualNominal.toStringAsFixed(2)}%\n'
+                  'Max: ${elemento.percentualMaximo.toStringAsFixed(2)}%',
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Fechar'),
+          ),
+        ],
+      ),
+    );
+  }
+}
