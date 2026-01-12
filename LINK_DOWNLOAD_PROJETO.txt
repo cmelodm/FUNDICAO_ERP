@@ -1,0 +1,169 @@
+================================================================================
+  LINK PARA DOWNLOAD DO PROJETO COMPLETO
+================================================================================
+
+📥 DOWNLOAD DIRETO:
+
+https://www.genspark.ai/api/files/s/wJ7o02F4
+
+Nome do Arquivo: foundry_erp_completo_v3_final.tar.gz
+Tamanho: 1.6 MB (1,631,123 bytes)
+Formato: tar.gz (compactado)
+
+================================================================================
+  CONTEÚDO DO BACKUP
+================================================================================
+
+✅ Código-fonte completo do Flutter
+✅ Todos os modelos de dados
+✅ Serviços e lógica de negócio
+✅ Telas e widgets
+✅ Configurações Android/Web
+✅ Dependências (pubspec.yaml)
+✅ Assets e recursos
+
+================================================================================
+  INSTRUÇÕES DE EXTRAÇÃO
+================================================================================
+
+LINUX / MAC:
+-----------
+1. Baixar arquivo:
+   $ wget https://www.genspark.ai/api/files/s/wJ7o02F4 -O foundry_erp_backup.tar.gz
+
+2. Extrair (restaura caminho absoluto /home/user/flutter_app):
+   $ tar -xzf foundry_erp_backup.tar.gz -C /
+
+3. Navegar para projeto:
+   $ cd /home/user/flutter_app
+
+4. Instalar dependências:
+   $ flutter pub get
+
+5. Executar:
+   $ flutter run -d chrome
+
+
+WINDOWS:
+--------
+1. Baixar arquivo do link acima usando navegador
+
+2. Extrair com 7-Zip ou WinRAR:
+   - Botão direito no arquivo
+   - Extrair aqui
+
+3. Copiar pasta flutter_app para seu diretório de trabalho
+   Exemplo: C:\Users\SeuNome\flutter_app
+
+4. Abrir terminal (CMD ou PowerShell) no diretório
+
+5. Instalar dependências:
+   > flutter pub get
+
+6. Executar:
+   > flutter run -d chrome
+
+
+ALTERNATIVE (Windows PowerShell):
+----------------------------------
+1. Download:
+   > Invoke-WebRequest -Uri "https://www.genspark.ai/api/files/s/wJ7o02F4" -OutFile "foundry_erp_backup.tar.gz"
+
+2. Extrair:
+   > tar -xzf foundry_erp_backup.tar.gz
+
+3. Navegar:
+   > cd home\user\flutter_app
+
+4. Dependências:
+   > flutter pub get
+
+5. Executar:
+   > flutter run -d chrome
+
+================================================================================
+  VERIFICAÇÃO DA INTEGRIDADE
+================================================================================
+
+Após extração, verifique se existem os seguintes arquivos:
+
+✅ lib/main.dart
+✅ lib/services/data_service.dart
+✅ lib/services/storage_service.dart
+✅ lib/screens/producao_screen.dart
+✅ lib/screens/producao_etapas_screen.dart
+✅ lib/screens/correcao_avancada_screen.dart
+✅ pubspec.yaml
+✅ android/app/build.gradle.kts
+
+Total de arquivos: ~150 arquivos Dart
+Estrutura de diretórios: lib/, android/, web/, test/
+
+================================================================================
+  REQUISITOS DO SISTEMA
+================================================================================
+
+- Flutter 3.35.4 ou superior
+- Dart 3.9.2 ou superior
+- Git (opcional, para versionamento)
+- VS Code ou Android Studio (IDE recomendada)
+- Chrome (para preview web)
+- Android SDK (para build APK)
+
+================================================================================
+  PRÓXIMOS COMANDOS APÓS EXTRAÇÃO
+================================================================================
+
+# Verificar instalação Flutter
+$ flutter doctor -v
+
+# Analisar código
+$ flutter analyze
+
+# Executar testes (se houver)
+$ flutter test
+
+# Build para web
+$ flutter build web --release
+
+# Build para Android
+$ flutter build apk --release
+
+# Executar em modo debug
+$ flutter run -d chrome --web-renderer html
+
+================================================================================
+  PROBLEMAS COMUNS
+================================================================================
+
+PROBLEMA 1: "Command 'flutter' not found"
+SOLUÇÃO: Instalar Flutter SDK (https://docs.flutter.dev/get-started/install)
+
+PROBLEMA 2: "Gradle build failed"
+SOLUÇÃO: Verificar Java JDK instalado (versão 11 ou superior)
+
+PROBLEMA 3: "Could not resolve dependencies"
+SOLUÇÃO: Executar "flutter pub get" novamente
+
+PROBLEMA 4: "Web renderer error"
+SOLUÇÃO: Usar flag --web-renderer html ao executar
+
+================================================================================
+  SUPORTE ADICIONAL
+================================================================================
+
+Documentação incluída:
+- CONTINUIDADE_PROJETO.md (Guia completo)
+- DOCUMENTACAO_TECNICA.md (Detalhes técnicos)
+- LEIA_PRIMEIRO.txt (Início rápido)
+
+Flutter Docs: https://docs.flutter.dev
+Hive Docs: https://docs.hivedb.dev
+Provider Docs: https://pub.dev/packages/provider
+
+================================================================================
+
+Versão: v3.0 Final
+Data: 09/12/2025
+
+================================================================================
