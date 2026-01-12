@@ -11,12 +11,16 @@ import 'package:foundry_erp/models/nota_fiscal_model.dart';
 import 'package:foundry_erp/models/ordem_compra_model.dart';
 import 'package:foundry_erp/models/ordem_venda_model.dart';
 import 'package:foundry_erp/models/usuario_model.dart';
+import 'package:foundry_erp/services/storage_service.dart';
 
 class DataService extends ChangeNotifier {
   // Singleton pattern
   static final DataService _instance = DataService._internal();
   factory DataService() => _instance;
   DataService._internal();
+
+  // 🔥 Storage Service para persistência
+  final StorageService _storage = StorageService();
 
   // Dados em memória (será substituído por Firebase futuramente)
   final List<MaterialModel> _materiais = [];
@@ -37,6 +41,18 @@ class DataService extends ChangeNotifier {
 
   // Inicializar dados de exemplo
   Future<void> inicializarDadosExemplo() async {
+    // 🔥 PASSO 1: Inicializar StorageService
+    await _storage.init();
+    
+    // 🔥 PASSO 2: Carregar ordens de produção do storage
+    final ordensStorage = _storage.carregarTodasOrdens();
+    if (ordensStorage.isNotEmpty) {
+      _ordensProducao.addAll(ordensStorage);
+      if (kDebugMode) {
+        debugPrint('✅ Carregadas ${ordensStorage.length} ordens do storage');
+      }
+    }
+    
     if (_materiais.isNotEmpty) return; // Já inicializado
 
     // Materiais de exemplo
@@ -660,6 +676,15 @@ class DataService extends ChangeNotifier {
     final index = _ordensProducao.indexWhere((o) => o.id == ordem.id);
     if (index != -1) {
       _ordensProducao[index] = ordem;
+      
+      // 🔥 Salva no storage persistente (Hive)
+      await _storage.salvarOrdemProducao(ordem);
+      
+      notifyListeners(); // 🔥 Notifica mudanças!
+      
+      if (kDebugMode) {
+        debugPrint('✅ Ordem ${ordem.numero} atualizada e salva no storage');
+      }
     }
   }
 
@@ -1023,5 +1048,17 @@ class DataService extends ChangeNotifier {
       'totalUsuarios': _usuarios.length,
       'usuariosAtivos': _usuarios.where((u) => u.ativo).length,
     };
+  }
+  
+  // Método para atualizar análise após correção
+  Future<void> atualizarAnaliseAposCorrecao(AnaliseEspectrometrica analise) async {
+    final index = _analises.indexWhere((a) => a.id == analise.id);
+    if (index != -1) {
+      _analises[index] = analise.copyWith(
+        status: StatusAnalise.corrigido,
+        updatedAt: DateTime.now(),
+      );
+      notifyListeners();
+    }
   }
 }

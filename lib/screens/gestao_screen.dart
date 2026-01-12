@@ -11,6 +11,9 @@ import 'relatorios_screen.dart';
 import 'ordens_compra_screen.dart';
 import 'ordens_venda_screen.dart';
 import 'usuarios_screen.dart';
+import 'gerenciamento_usuarios_screen.dart';
+import '../models/permissao_model.dart';
+import '../widgets/permissao_widget.dart';
 
 class GestaoScreen extends StatelessWidget {
   const GestaoScreen({super.key});
@@ -18,10 +21,23 @@ class GestaoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dataService = Provider.of<DataService>(context);
+    final usuarioLogado = dataService.authService.usuarioLogado;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Gestão'),
+        actions: [
+          if (usuarioLogado != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: PerfilBadge(
+                usuario: usuarioLogado,
+                showNome: false,
+                showRole: true,
+                size: 32,
+              ),
+            ),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -156,16 +172,65 @@ class GestaoScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
 
-          // Usuários
+          // Gerenciamento de Usuários (apenas Admin e Gerente)
+          PermissaoWidget(
+            modulo: Modulo.usuarios,
+            acao: Acao.visualizar,
+            fallback: const SizedBox.shrink(),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: Colors.purple.withValues(alpha: 0.3),
+                  width: 2,
+                ),
+                color: Colors.white,
+              ),
+              child: Card(
+                elevation: 0,
+                margin: EdgeInsets.zero,
+                child: ListTile(
+                leading: const CircleAvatar(
+                  backgroundColor: Colors.purple,
+                  foregroundColor: Colors.white,
+                  child: Icon(Icons.admin_panel_settings),
+                ),
+                title: const Row(
+                  children: [
+                    Text('Gerenciamento de Usuários'),
+                    SizedBox(width: 8),
+                    Icon(Icons.shield, size: 16, color: Colors.purple),
+                  ],
+                ),
+                subtitle: Text(
+                  '${dataService.usuarios.where((u) => u.ativo).length} usuários ativos - Controle de acesso',
+                  style: TextStyle(color: Colors.grey[600]),
+                ),
+                trailing: const Icon(Icons.arrow_forward_ios, color: Colors.purple),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const GerenciamentoUsuariosScreen(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          
+          // Usuários (visualização simples - todos podem ver)
           Card(
             child: ListTile(
               leading: const CircleAvatar(
-                backgroundColor: Colors.purple,
+                backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
                 child: Icon(Icons.people),
               ),
               title: const Text('Usuários do Sistema'),
-              subtitle: Text('${dataService.usuarios.where((u) => u.ativo).length} usuários ativos'),
+              subtitle: Text('${dataService.usuarios.where((u) => u.ativo).length} usuários cadastrados'),
               trailing: const Icon(Icons.arrow_forward_ios),
               onTap: () {
                 Navigator.push(

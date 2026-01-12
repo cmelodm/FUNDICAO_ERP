@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:foundry_erp/models/ordem_producao_model.dart';
 import 'package:foundry_erp/services/data_service.dart';
+import 'package:foundry_erp/screens/producao_etapas_screen.dart';
 import 'package:intl/intl.dart';
 
 class ProducaoScreen extends StatefulWidget {
@@ -11,7 +13,6 @@ class ProducaoScreen extends StatefulWidget {
 }
 
 class _ProducaoScreenState extends State<ProducaoScreen> {
-  final DataService _dataService = DataService();
   bool _isKanbanView = true;
 
   @override
@@ -33,7 +34,13 @@ class _ProducaoScreenState extends State<ProducaoScreen> {
           ),
         ],
       ),
-      body: _isKanbanView ? _buildKanbanView() : _buildListView(),
+      body: Consumer<DataService>(
+        builder: (context, dataService, child) {
+          return _isKanbanView 
+              ? _buildKanbanView(dataService) 
+              : _buildListView(dataService);
+        },
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showNovaOrdemDialog(),
         icon: const Icon(Icons.add),
@@ -42,17 +49,17 @@ class _ProducaoScreenState extends State<ProducaoScreen> {
     );
   }
 
-  Widget _buildKanbanView() {
-    final ordensAguardando = _dataService.ordensProducao
+  Widget _buildKanbanView(DataService dataService) {
+    final ordensAguardando = dataService.ordensProducao
         .where((o) => o.status == 'aguardando')
         .toList();
-    final ordensEmProducao = _dataService.ordensProducao
+    final ordensEmProducao = dataService.ordensProducao
         .where((o) => o.status == 'em_producao')
         .toList();
-    final ordensPausadas = _dataService.ordensProducao
+    final ordensPausadas = dataService.ordensProducao
         .where((o) => o.status == 'pausada')
         .toList();
-    final ordensConcluidas = _dataService.ordensProducao
+    final ordensConcluidas = dataService.ordensProducao
         .where((o) => o.status == 'concluida')
         .toList();
 
@@ -239,8 +246,8 @@ class _ProducaoScreenState extends State<ProducaoScreen> {
     );
   }
 
-  Widget _buildListView() {
-    final ordens = _dataService.ordensProducao;
+  Widget _buildListView(DataService dataService) {
+    final ordens = dataService.ordensProducao;
 
     return ListView.builder(
       padding: const EdgeInsets.all(16),
@@ -475,8 +482,36 @@ class _ProducaoScreenState extends State<ProducaoScreen> {
                   ),
                 ],
               ),
+              const SizedBox(height: 24),
+              // Botão para gerenciar etapas
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () => _abrirGerenciamentoEtapas(ordem),
+                  icon: const Icon(Icons.settings_suggest),
+                  label: const Text('Gerenciar Etapas de Produção'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                ),
+              ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+  
+  /// Abre tela de gerenciamento de etapas
+  void _abrirGerenciamentoEtapas(OrdemProducaoModel ordem) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProducaoEtapasScreen(
+          ordemId: ordem.id,
+          ordemNumero: ordem.numero,
         ),
       ),
     );
@@ -677,9 +712,18 @@ class _NovaOrdemProducaoScreenState extends State<NovaOrdemProducaoScreen> {
   @override
   void initState() {
     super.initState();
+    // Número será gerado no build
+  }
+  
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     // Gerar número automático
-    final ultimaOrdem = _dataService.ordensProducao.length;
-    _numeroController.text = 'OP-2024-${(ultimaOrdem + 1).toString().padLeft(3, '0')}';
+    if (_numeroController.text.isEmpty) {
+      final dataService = Provider.of<DataService>(context, listen: false);
+      final ultimaOrdem = dataService.ordensProducao.length;
+      _numeroController.text = 'OP-2024-${(ultimaOrdem + 1).toString().padLeft(3, '0')}';
+    }
   }
 
   @override
@@ -948,7 +992,8 @@ class _NovaOrdemProducaoScreenState extends State<NovaOrdemProducaoScreen> {
   }
 
   void _adicionarMaterial() {
-    final materiaisDisponiveis = _dataService.materiais;
+    final dataService = Provider.of<DataService>(context, listen: false);
+    final materiaisDisponiveis = dataService.materiais;
 
     showDialog(
       context: context,
@@ -1084,7 +1129,8 @@ class _NovaOrdemProducaoScreenState extends State<NovaOrdemProducaoScreen> {
       );
 
       // Adicionar ao DataService
-      _dataService.adicionarOrdemProducao(novaOrdem);
+      final dataService = Provider.of<DataService>(context, listen: false);
+      dataService.adicionarOrdemProducao(novaOrdem);
 
       // Voltar e mostrar confirmação
       Navigator.pop(context);

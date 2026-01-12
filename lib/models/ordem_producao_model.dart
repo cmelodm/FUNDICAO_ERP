@@ -1,3 +1,5 @@
+import 'etapa_producao_model.dart' as Hierarquico;
+
 class OrdemProducaoModel {
   final String id;
   final String numero;
@@ -7,6 +9,7 @@ class OrdemProducaoModel {
   final String prioridade; // baixa, media, alta, urgente
   final List<MaterialUtilizado> materiaisUtilizados;
   final List<EtapaProducao> etapas;
+  final List<Hierarquico.EtapaProducao>? etapasHierarquicas; // 🔥 NOVO - Etapas hierárquicas com sub-etapas
   final double custoEstimado;
   final double custoReal;
   final DateTime dataCriacao;
@@ -23,6 +26,7 @@ class OrdemProducaoModel {
     required this.prioridade,
     required this.materiaisUtilizados,
     required this.etapas,
+    this.etapasHierarquicas, // 🔥 NOVO
     required this.custoEstimado,
     required this.custoReal,
     required this.dataCriacao,
@@ -72,6 +76,43 @@ class OrdemProducaoModel {
     if (etapas.isEmpty) return 0;
     final concluidas = etapas.where((e) => e.status == 'concluida').length;
     return (concluidas / etapas.length) * 100;
+  }
+  
+  /// Método copyWith para OrdemProducaoModel
+  OrdemProducaoModel copyWith({
+    String? id,
+    String? numero,
+    String? produto,
+    String? cliente,
+    String? status,
+    String? prioridade,
+    List<MaterialUtilizado>? materiaisUtilizados,
+    List<EtapaProducao>? etapas,
+    List<Hierarquico.EtapaProducao>? etapasHierarquicas,
+    double? custoEstimado,
+    double? custoReal,
+    DateTime? dataCriacao,
+    DateTime? dataInicio,
+    DateTime? dataConclusao,
+    String? observacoes,
+  }) {
+    return OrdemProducaoModel(
+      id: id ?? this.id,
+      numero: numero ?? this.numero,
+      produto: produto ?? this.produto,
+      cliente: cliente ?? this.cliente,
+      status: status ?? this.status,
+      prioridade: prioridade ?? this.prioridade,
+      materiaisUtilizados: materiaisUtilizados ?? this.materiaisUtilizados,
+      etapas: etapas ?? this.etapas,
+      etapasHierarquicas: etapasHierarquicas ?? this.etapasHierarquicas,
+      custoEstimado: custoEstimado ?? this.custoEstimado,
+      custoReal: custoReal ?? this.custoReal,
+      dataCriacao: dataCriacao ?? this.dataCriacao,
+      dataInicio: dataInicio ?? this.dataInicio,
+      dataConclusao: dataConclusao ?? this.dataConclusao,
+      observacoes: observacoes ?? this.observacoes,
+    );
   }
 
   Map<String, dynamic> toMap() {

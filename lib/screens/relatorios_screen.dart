@@ -34,14 +34,31 @@ class RelatoriosScreen extends StatelessWidget {
               await RelatorioService.gerarRelatorioPDFMateriais(dataService.materiais);
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('✅ PDF de Materiais gerado!')),
+                  const SnackBar(
+                    content: Text('📥 PDF de Materiais baixado!'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              }
+            },
+            onPrint: () async {
+              await RelatorioService.imprimirPDFMateriais(dataService.materiais);
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('🖨️ PDF aberto em nova janela para impressão'),
+                    backgroundColor: Colors.blue,
+                  ),
                 );
               }
             },
             onCSV: () {
               RelatorioService.exportarMateriaisCSV(dataService.materiais);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('✅ CSV de Materiais exportado!')),
+                const SnackBar(
+                  content: Text('📥 CSV de Materiais baixado!'),
+                  backgroundColor: Colors.green,
+                ),
               );
             },
           ),
@@ -57,14 +74,31 @@ class RelatoriosScreen extends StatelessWidget {
               await RelatorioService.gerarRelatorioPDFProducao(dataService.ordensProducao);
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('✅ PDF de Produção gerado!')),
+                  const SnackBar(
+                    content: Text('📥 PDF de Produção baixado!'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              }
+            },
+            onPrint: () async {
+              await RelatorioService.imprimirPDFProducao(dataService.ordensProducao);
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('🖨️ PDF aberto em nova janela para impressão'),
+                    backgroundColor: Colors.blue,
+                  ),
                 );
               }
             },
             onCSV: () {
               RelatorioService.exportarProducaoCSV(dataService.ordensProducao);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('✅ CSV de Produção exportado!')),
+                const SnackBar(
+                  content: Text('📥 CSV de Produção baixado!'),
+                  backgroundColor: Colors.green,
+                ),
               );
             },
           ),
@@ -79,7 +113,10 @@ class RelatoriosScreen extends StatelessWidget {
             onCSV: () {
               RelatorioService.exportarFornecedoresCSV(dataService.fornecedores);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('✅ CSV de Fornecedores exportado!')),
+                const SnackBar(
+                  content: Text('📥 CSV de Fornecedores baixado!'),
+                  backgroundColor: Colors.green,
+                ),
               );
             },
           ),
@@ -94,7 +131,10 @@ class RelatoriosScreen extends StatelessWidget {
             onCSV: () {
               RelatorioService.exportarQualidadeCSV(dataService.inspecoes);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('✅ CSV de Qualidade exportado!')),
+                const SnackBar(
+                  content: Text('📥 CSV de Qualidade baixado!'),
+                  backgroundColor: Colors.green,
+                ),
               );
             },
           ),
@@ -109,7 +149,10 @@ class RelatoriosScreen extends StatelessWidget {
             onCSV: () {
               RelatorioService.exportarNotasFiscaisCSV(dataService.notasFiscais);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('✅ CSV de Notas Fiscais exportado!')),
+                const SnackBar(
+                  content: Text('📥 CSV de Notas Fiscais baixado!'),
+                  backgroundColor: Colors.green,
+                ),
               );
             },
           ),
@@ -124,7 +167,10 @@ class RelatoriosScreen extends StatelessWidget {
             onCSV: () {
               RelatorioService.exportarAnalisesCSV(dataService.analises);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('✅ CSV de Análises exportado!')),
+                const SnackBar(
+                  content: Text('📥 CSV de Análises baixado!'),
+                  backgroundColor: Colors.green,
+                ),
               );
             },
           ),
@@ -141,6 +187,7 @@ class RelatoriosScreen extends StatelessWidget {
     Color color, {
     VoidCallback? onPDF,
     VoidCallback? onCSV,
+    VoidCallback? onPrint,
   }) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -186,8 +233,26 @@ class RelatoriosScreen extends StatelessWidget {
                   Expanded(
                     child: OutlinedButton.icon(
                       onPressed: onPDF,
-                      icon: const Icon(Icons.picture_as_pdf),
-                      label: const Text('PDF'),
+                      icon: const Icon(Icons.download, size: 18),
+                      label: const Text('Baixar PDF'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.deepPurple,
+                        side: const BorderSide(color: Colors.deepPurple),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                ],
+                if (onPrint != null) ...[
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: onPrint,
+                      icon: const Icon(Icons.print, size: 18),
+                      label: const Text('Imprimir'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.blue,
+                        side: const BorderSide(color: Colors.blue),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -196,7 +261,7 @@ class RelatoriosScreen extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton.icon(
                       onPressed: onCSV,
-                      icon: const Icon(Icons.table_chart),
+                      icon: const Icon(Icons.table_chart, size: 18),
                       label: const Text('CSV/Excel'),
                     ),
                   ),

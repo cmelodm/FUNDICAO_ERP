@@ -12,6 +12,8 @@ class LigaTemplatesService {
         // ============ NORMA SAE ============
         _createSAE_303(), // Nova
         _createSAE_305(), // Nova
+        _createSAE_305_C(), // Nova - Alumiza
+        _createSAE_305_I(), // Nova - Alumiza
         _createSAE306(),
         _createSAE308(),
         _createSAE_309(), // Nova
@@ -58,7 +60,7 @@ class LigaTemplatesService {
 
   // ============ DEFINIÇÕES DAS LIGAS ============
 
-  // SAE 306 - Alumínio-Silício-Cobre Hipoeutética
+  // SAE 306 - Alumínio-Silício-Cobre Hipoeutética - Atualizado Almeida Metais 2025
   LigaTemplate _createSAE306() {
     return LigaTemplate(
       codigo: 'SAE 306',
@@ -66,7 +68,7 @@ class LigaTemplatesService {
       norma: 'SAE',
       tipo: 'Alumínio',
       descricao:
-          'Liga de alumínio-silício-cobre hipoeutética com excelente fundibilidade',
+          'Liga de alumínio-silício-cobre hipoeutética com excelente fundibilidade - Conforme Almeida Metais',
       aplicacao: 'Blocos de motor, cabeçotes, peças automotivas',
       elementos: [
         ElementoLiga(
@@ -80,25 +82,25 @@ class LigaTemplatesService {
         ElementoLiga(
           simbolo: 'Cu',
           nome: 'Cobre',
-          percentualMinimo: 3.0,
-          percentualMaximo: 4.0,
-          percentualNominal: 3.5,
+          percentualMinimo: 4.0,
+          percentualMaximo: 5.0,
+          percentualNominal: 4.5,
           rendimentoForno: 98.0,
         ),
         ElementoLiga(
           simbolo: 'Fe',
           nome: 'Ferro',
-          percentualMinimo: 1.0,
+          percentualMinimo: 0.0,
           percentualMaximo: 1.3,
-          percentualNominal: 1.15,
+          percentualNominal: 0.65,
           rendimentoForno: 98.0,
         ),
         ElementoLiga(
           simbolo: 'Mg',
           nome: 'Magnésio',
-          percentualMinimo: 0.0,
-          percentualMaximo: 0.1,
-          percentualNominal: 0.05,
+          percentualMinimo: 0.20,
+          percentualMaximo: 0.45,
+          percentualNominal: 0.325,
           rendimentoForno: 90.0,
         ),
         ElementoLiga(
@@ -113,9 +115,33 @@ class LigaTemplatesService {
           simbolo: 'Zn',
           nome: 'Zinco',
           percentualMinimo: 0.0,
-          percentualMaximo: 3.0,
-          percentualNominal: 1.5,
+          percentualMaximo: 1.0,
+          percentualNominal: 0.5,
           rendimentoForno: 98.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Ni',
+          nome: 'Níquel',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.5,
+          percentualNominal: 0.25,
+          rendimentoForno: 97.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Sn',
+          nome: 'Estanho',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.2,
+          percentualNominal: 0.1,
+          rendimentoForno: 98.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Ti',
+          nome: 'Titânio',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.2,
+          percentualNominal: 0.1,
+          rendimentoForno: 92.0,
         ),
       ],
     );
@@ -756,7 +782,7 @@ class LigaTemplatesService {
     );
   }
 
-  // SAE 303 - Alumínio-Silício (Alta Fluidez)
+  // SAE 303 - Alumínio-Silício (Alta Fluidez) - Documento Oficial 2025
   LigaTemplate _createSAE_303() {
     return LigaTemplate(
       codigo: 'SAE 303',
@@ -764,9 +790,89 @@ class LigaTemplatesService {
       norma: 'SAE',
       tipo: 'Alumínio',
       descricao:
-          'Liga Al-Si eutética com excelente fluidez, ideal para peças complexas',
+          'Liga Al-Si eutética com ótima fluidez para peças de paredes finas ou desenhos complexos - Especificação Oficial',
       aplicacao:
-          'Carcaças complexas, peças ornamentais, componentes com geometria intrincada',
+          'Peças de paredes finas, desenhos complexos, peças injetadas (Fe 0.7-1.1%), peças em areia/coquilha (modificação com sódio)',
+      elementos: [
+        ElementoLiga(
+          simbolo: 'Si',
+          nome: 'Silício',
+          percentualMinimo: 10.50,
+          percentualMaximo: 12.0,
+          percentualNominal: 11.25,
+          rendimentoForno: 95.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Cu',
+          nome: 'Cobre',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.40,
+          percentualNominal: 0.20,
+          rendimentoForno: 98.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Fe',
+          nome: 'Ferro',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.60,
+          percentualNominal: 0.30,
+          rendimentoForno: 98.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Mn',
+          nome: 'Manganês',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.35,
+          percentualNominal: 0.175,
+          rendimentoForno: 95.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Mg',
+          nome: 'Magnésio',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.10,
+          percentualNominal: 0.05,
+          rendimentoForno: 90.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Ni',
+          nome: 'Níquel',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.20,
+          percentualNominal: 0.10,
+          rendimentoForno: 97.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Zn',
+          nome: 'Zinco',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.35,
+          percentualNominal: 0.175,
+          rendimentoForno: 98.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Sn',
+          nome: 'Estanho',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.15,
+          percentualNominal: 0.075,
+          rendimentoForno: 98.0,
+        ),
+      ],
+    );
+  }
+
+  // SAE 305 - Alumínio-Silício-Cobre (Fundição sob Pressão) - Documento Oficial 2025
+  LigaTemplate _createSAE_305() {
+    return LigaTemplate(
+      codigo: 'SAE 305',
+      nome: 'Liga SAE 305 (Al-Si-Cu)',
+      norma: 'SAE',
+      tipo: 'Alumínio',
+      descricao:
+          'Liga indicada para fundição sob pressão, coquilha e areia. Boa fluidez e usinabilidade - Especificação Oficial',
+      aplicacao:
+          'Fundição sob pressão, coquilha, areia. Peças com espessuras de paredes variadas. Temperatura vazamento: 630-690°C',
       elementos: [
         ElementoLiga(
           simbolo: 'Si',
@@ -779,24 +885,24 @@ class LigaTemplatesService {
         ElementoLiga(
           simbolo: 'Cu',
           nome: 'Cobre',
-          percentualMinimo: 0.0,
-          percentualMaximo: 1.0,
-          percentualNominal: 0.5,
+          percentualMinimo: 3.0,
+          percentualMaximo: 4.5,
+          percentualNominal: 3.75,
           rendimentoForno: 98.0,
         ),
         ElementoLiga(
           simbolo: 'Fe',
           nome: 'Ferro',
           percentualMinimo: 0.0,
-          percentualMaximo: 1.3,
-          percentualNominal: 0.6,
+          percentualMaximo: 1.0,
+          percentualNominal: 0.50,
           rendimentoForno: 98.0,
         ),
         ElementoLiga(
           simbolo: 'Mn',
           nome: 'Manganês',
           percentualMinimo: 0.0,
-          percentualMaximo: 0.5,
+          percentualMaximo: 0.50,
           percentualNominal: 0.25,
           rendimentoForno: 95.0,
         ),
@@ -804,87 +910,167 @@ class LigaTemplatesService {
           simbolo: 'Mg',
           nome: 'Magnésio',
           percentualMinimo: 0.0,
-          percentualMaximo: 0.3,
-          percentualNominal: 0.1,
+          percentualMaximo: 0.10,
+          percentualNominal: 0.05,
           rendimentoForno: 90.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Ni',
+          nome: 'Níquel',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.50,
+          percentualNominal: 0.25,
+          rendimentoForno: 97.0,
         ),
         ElementoLiga(
           simbolo: 'Zn',
           nome: 'Zinco',
           percentualMinimo: 0.0,
-          percentualMaximo: 1.0,
-          percentualNominal: 0.5,
+          percentualMaximo: 2.90,
+          percentualNominal: 1.45,
+          rendimentoForno: 98.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Sn',
+          nome: 'Estanho',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.35,
+          percentualNominal: 0.175,
           rendimentoForno: 98.0,
         ),
       ],
     );
   }
 
-  // SAE 305 - Alumínio-Silício-Cobre (Uso Geral)
-  LigaTemplate _createSAE_305() {
+  // SAE 305 C - Alumínio-Silício-Cobre (Versão Comercial) - Alumiza 2025
+  LigaTemplate _createSAE_305_C() {
     return LigaTemplate(
-      codigo: 'SAE 305',
-      nome: 'Liga SAE 305 (Al-Si-Cu)',
+      codigo: 'SAE 305 C',
+      nome: 'Liga SAE 305 C (Al-Si-Cu Comercial)',
       norma: 'SAE',
       tipo: 'Alumínio',
       descricao:
-          'Liga Al-Si-Cu de uso geral, boa fundibilidade e usinabilidade',
+          'Liga SAE 305 versão comercial com tolerâncias mais amplas - Conforme Alumiza',
       aplicacao:
-          'Blocos de motor, carcaças de transmissão, componentes automotivos gerais',
+          'Componentes automotivos de uso geral, carcaças, blocos não críticos',
       elementos: [
         ElementoLiga(
           simbolo: 'Si',
           nome: 'Silício',
           percentualMinimo: 4.5,
           percentualMaximo: 6.0,
-          percentualNominal: 5.0,
+          percentualNominal: 5.25,
           rendimentoForno: 95.0,
         ),
         ElementoLiga(
           simbolo: 'Cu',
           nome: 'Cobre',
           percentualMinimo: 1.0,
-          percentualMaximo: 1.5,
-          percentualNominal: 1.25,
+          percentualMaximo: 2.0,
+          percentualNominal: 1.5,
           rendimentoForno: 98.0,
         ),
         ElementoLiga(
           simbolo: 'Fe',
           nome: 'Ferro',
           percentualMinimo: 0.0,
-          percentualMaximo: 1.3,
-          percentualNominal: 0.6,
+          percentualMaximo: 1.5,
+          percentualNominal: 0.75,
           rendimentoForno: 98.0,
         ),
         ElementoLiga(
           simbolo: 'Mn',
           nome: 'Manganês',
           percentualMinimo: 0.0,
-          percentualMaximo: 0.5,
-          percentualNominal: 0.25,
+          percentualMaximo: 0.6,
+          percentualNominal: 0.3,
           rendimentoForno: 95.0,
         ),
         ElementoLiga(
           simbolo: 'Mg',
           nome: 'Magnésio',
           percentualMinimo: 0.0,
-          percentualMaximo: 0.3,
-          percentualNominal: 0.1,
+          percentualMaximo: 0.35,
+          percentualNominal: 0.175,
           rendimentoForno: 90.0,
         ),
         ElementoLiga(
           simbolo: 'Zn',
           nome: 'Zinco',
           percentualMinimo: 0.0,
-          percentualMaximo: 1.0,
-          percentualNominal: 0.5,
+          percentualMaximo: 1.2,
+          percentualNominal: 0.6,
           rendimentoForno: 98.0,
         ),
       ],
     );
   }
 
-  // SAE 309 - Alumínio-Silício-Cobre-Magnésio (Média Resistência)
+  // SAE 305 I - Alumínio-Silício-Cobre (Versão Industrial) - Alumiza 2025
+  LigaTemplate _createSAE_305_I() {
+    return LigaTemplate(
+      codigo: 'SAE 305 I',
+      nome: 'Liga SAE 305 I (Al-Si-Cu Industrial)',
+      norma: 'SAE',
+      tipo: 'Alumínio',
+      descricao:
+          'Liga SAE 305 versão industrial com controle mais rigoroso - Conforme Alumiza',
+      aplicacao:
+          'Componentes automotivos críticos, blocos de motor, cabeçotes de qualidade superior',
+      elementos: [
+        ElementoLiga(
+          simbolo: 'Si',
+          nome: 'Silício',
+          percentualMinimo: 4.8,
+          percentualMaximo: 5.8,
+          percentualNominal: 5.3,
+          rendimentoForno: 95.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Cu',
+          nome: 'Cobre',
+          percentualMinimo: 1.0,
+          percentualMaximo: 1.4,
+          percentualNominal: 1.2,
+          rendimentoForno: 98.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Fe',
+          nome: 'Ferro',
+          percentualMinimo: 0.0,
+          percentualMaximo: 1.0,
+          percentualNominal: 0.5,
+          rendimentoForno: 98.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Mn',
+          nome: 'Manganês',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.4,
+          percentualNominal: 0.2,
+          rendimentoForno: 95.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Mg',
+          nome: 'Magnésio',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.25,
+          percentualNominal: 0.125,
+          rendimentoForno: 90.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Zn',
+          nome: 'Zinco',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.8,
+          percentualNominal: 0.4,
+          rendimentoForno: 98.0,
+        ),
+      ],
+    );
+  }
+
+  // SAE 309 - Alumínio-Silício-Cobre-Magnésio (Média Resistência) - Atualizado Almeida Metais 2025
   LigaTemplate _createSAE_309() {
     return LigaTemplate(
       codigo: 'SAE 309',
@@ -892,7 +1078,7 @@ class LigaTemplatesService {
       norma: 'SAE',
       tipo: 'Alumínio',
       descricao:
-          'Liga Al-Si-Cu-Mg com média resistência mecânica, boa fundibilidade',
+          'Liga Al-Si-Cu-Mg com média resistência mecânica, boa fundibilidade - Conforme Almeida Metais',
       aplicacao:
           'Cabeçotes, blocos de cilindros, carters, peças automotivas médias',
       elementos: [
@@ -917,7 +1103,7 @@ class LigaTemplatesService {
           nome: 'Ferro',
           percentualMinimo: 0.0,
           percentualMaximo: 1.3,
-          percentualNominal: 0.6,
+          percentualNominal: 0.65,
           rendimentoForno: 98.0,
         ),
         ElementoLiga(
@@ -931,9 +1117,9 @@ class LigaTemplatesService {
         ElementoLiga(
           simbolo: 'Mg',
           nome: 'Magnésio',
-          percentualMinimo: 0.0,
-          percentualMaximo: 0.3,
-          percentualNominal: 0.1,
+          percentualMinimo: 0.40,
+          percentualMaximo: 0.60,
+          percentualNominal: 0.50,
           rendimentoForno: 90.0,
         ),
         ElementoLiga(
@@ -941,7 +1127,7 @@ class LigaTemplatesService {
           nome: 'Zinco',
           percentualMinimo: 0.0,
           percentualMaximo: 3.0,
-          percentualNominal: 1.0,
+          percentualNominal: 1.5,
           rendimentoForno: 98.0,
         ),
         ElementoLiga(
@@ -949,14 +1135,30 @@ class LigaTemplatesService {
           nome: 'Níquel',
           percentualMinimo: 0.0,
           percentualMaximo: 0.5,
-          percentualNominal: 0.2,
+          percentualNominal: 0.25,
           rendimentoForno: 97.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Sn',
+          nome: 'Estanho',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.2,
+          percentualNominal: 0.1,
+          rendimentoForno: 98.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Ti',
+          nome: 'Titânio',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.2,
+          percentualNominal: 0.1,
+          rendimentoForno: 92.0,
         ),
       ],
     );
   }
 
-  // SAE 323 - Alumínio-Silício-Cobre (Equivalente A356)
+  // SAE 323 - Alumínio-Silício-Magnésio (Equivalente A356) - Atualizado Almeida Metais 2025
   LigaTemplate _createSAE_323() {
     return LigaTemplate(
       codigo: 'SAE 323',
@@ -964,7 +1166,7 @@ class LigaTemplatesService {
       norma: 'SAE',
       tipo: 'Alumínio',
       descricao:
-          'Liga Al-Si-Mg de alta resistência, equivalente à A356, tratável termicamente',
+          'Liga Al-Si-Mg de alta resistência, equivalente à A356, tratável termicamente - Conforme Almeida Metais',
       aplicacao:
           'Rodas automotivas, componentes estruturais, peças de alta responsabilidade',
       elementos: [
@@ -988,39 +1190,47 @@ class LigaTemplatesService {
           simbolo: 'Cu',
           nome: 'Cobre',
           percentualMinimo: 0.0,
-          percentualMaximo: 0.2,
-          percentualNominal: 0.1,
+          percentualMaximo: 0.25,
+          percentualNominal: 0.125,
           rendimentoForno: 98.0,
         ),
         ElementoLiga(
           simbolo: 'Fe',
           nome: 'Ferro',
           percentualMinimo: 0.0,
-          percentualMaximo: 0.2,
-          percentualNominal: 0.1,
+          percentualMaximo: 0.6,
+          percentualNominal: 0.3,
           rendimentoForno: 98.0,
         ),
         ElementoLiga(
           simbolo: 'Mn',
           nome: 'Manganês',
           percentualMinimo: 0.0,
-          percentualMaximo: 0.1,
-          percentualNominal: 0.05,
+          percentualMaximo: 0.35,
+          percentualNominal: 0.175,
           rendimentoForno: 95.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Zn',
+          nome: 'Zinco',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.35,
+          percentualNominal: 0.175,
+          rendimentoForno: 98.0,
         ),
         ElementoLiga(
           simbolo: 'Ti',
           nome: 'Titânio',
           percentualMinimo: 0.0,
-          percentualMaximo: 0.2,
-          percentualNominal: 0.1,
+          percentualMaximo: 0.25,
+          percentualNominal: 0.125,
           rendimentoForno: 92.0,
         ),
       ],
     );
   }
 
-  // SAE 329 - Alumínio-Silício-Magnésio (Alta Resistência)
+  // SAE 329 - Alumínio-Silício-Magnésio (Alta Resistência) - Atualizado Almeida Metais 2025
   LigaTemplate _createSAE_329() {
     return LigaTemplate(
       codigo: 'SAE 329',
@@ -1028,7 +1238,7 @@ class LigaTemplatesService {
       norma: 'SAE',
       tipo: 'Alumínio',
       descricao:
-          'Liga Al-Si-Mg premium com excelente resistência mecânica após T6',
+          'Liga Al-Si-Mg premium com excelente resistência mecânica após T6 - Conforme Almeida Metais',
       aplicacao:
           'Componentes aeroespaciais, peças críticas de segurança, rodas de alta performance',
       elementos: [
@@ -1052,7 +1262,7 @@ class LigaTemplatesService {
           simbolo: 'Cu',
           nome: 'Cobre',
           percentualMinimo: 0.0,
-          percentualMaximo: 0.1,
+          percentualMaximo: 0.10,
           percentualNominal: 0.05,
           rendimentoForno: 98.0,
         ),
@@ -1060,25 +1270,17 @@ class LigaTemplatesService {
           simbolo: 'Fe',
           nome: 'Ferro',
           percentualMinimo: 0.0,
-          percentualMaximo: 0.12,
-          percentualNominal: 0.06,
+          percentualMaximo: 0.15,
+          percentualNominal: 0.075,
           rendimentoForno: 98.0,
         ),
         ElementoLiga(
           simbolo: 'Mn',
           nome: 'Manganês',
           percentualMinimo: 0.0,
-          percentualMaximo: 0.05,
-          percentualNominal: 0.02,
+          percentualMaximo: 0.10,
+          percentualNominal: 0.05,
           rendimentoForno: 95.0,
-        ),
-        ElementoLiga(
-          simbolo: 'Ti',
-          nome: 'Titânio',
-          percentualMinimo: 0.04,
-          percentualMaximo: 0.20,
-          percentualNominal: 0.12,
-          rendimentoForno: 92.0,
         ),
         ElementoLiga(
           simbolo: 'Zn',
@@ -1087,6 +1289,14 @@ class LigaTemplatesService {
           percentualMaximo: 0.10,
           percentualNominal: 0.05,
           rendimentoForno: 98.0,
+        ),
+        ElementoLiga(
+          simbolo: 'Ti',
+          nome: 'Titânio',
+          percentualMinimo: 0.0,
+          percentualMaximo: 0.20,
+          percentualNominal: 0.10,
+          rendimentoForno: 92.0,
         ),
       ],
     );
