@@ -1,374 +1,352 @@
-# 🏭 FundiçãoPro ERP
+# 🏭 Foundry ERP - Sistema de Gestão para Indústrias de Fundição
 
-**Sistema ERP Completo para Gestão de Fundição Industrial**
+![Flutter](https://img.shields.io/badge/Flutter-3.35.4-02569B?logo=flutter)
+![Dart](https://img.shields.io/badge/Dart-3.9.2-0175C2?logo=dart)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Version](https://img.shields.io/badge/Version-3.0%20Final-blue)
 
-[![Flutter Version](https://img.shields.io/badge/Flutter-3.35.4-blue.svg)](https://flutter.dev/)
-[![Dart Version](https://img.shields.io/badge/Dart-3.9.2-blue.svg)](https://dart.dev/)
-[![License](https://img.shields.io/badge/License-Proprietary-red.svg)]()
-
----
-
-## 📖 Sobre o Projeto
-
-O **FundiçãoPro ERP** é um sistema completo de gestão empresarial especializado em fundições metalúrgicas, desenvolvido em Flutter para garantir alta performance e multiplataforma. O sistema oferece controle total sobre produção, materiais, qualidade, compras, vendas e análises metalúrgicas.
-
-### ✨ Principais Funcionalidades
-
-- 🔐 **Sistema de Autenticação** com 4 níveis de acesso hierárquico
-- 📊 **Dashboard Analítico** com estatísticas em tempo real
-- 📦 **Gestão de Materiais** com controle de estoque e alertas
-- 🏭 **Ordens de Produção** com Kanban visual
-- 🛒 **Ordens de Compra** integradas com fornecedores
-- 💰 **Ordens de Venda** com emissão de NF e baixa automática de estoque
-- 👥 **Gestão de Fornecedores** com sistema de avaliação
-- 🔬 **19 Ligas Metalúrgicas** padrão (SAE/ASTM/DIN/AA)
-- 🧪 **Análise Espectrométrica** com cálculo de correções
-- ✅ **Controle de Qualidade** completo
-- 📄 **Parser XML** de Notas Fiscais Eletrônicas (NF-e)
-- 📈 **Relatórios** em PDF e CSV
+Sistema completo de gestão (ERP) desenvolvido em Flutter para indústrias de fundição de alumínio, com foco em controle de produção, gestão de ligas metalúrgicas e correção avançada de composições químicas.
 
 ---
 
-## 🎯 Público-Alvo
+## 🎯 Visão Geral
 
-- **Fundições Metalúrgicas**
-- **Indústrias de Usinagem**
-- **Empresas de Conformação de Metais**
-- **Fabricantes de Peças Automotivas**
-- **Indústrias de Metalurgia em Geral**
+O **Foundry ERP** é uma solução profissional e completa para gestão de fundições, oferecendo:
+
+- 📊 **Dashboard Inteligente** com métricas em tempo real
+- 🏭 **Sistema de Produção** com 8 etapas hierárquicas
+- 🧪 **Correção Avançada de Ligas** com recálculo em cascata
+- 📚 **Biblioteca de 21 Ligas Metalúrgicas** (SAE, ASTM, DIN, AA)
+- 👥 **Controle de Acesso** com 5 níveis de permissão
+- 💾 **Persistência Local** com Hive para sincronização multi-usuário
+- 📈 **Relatórios PDF/CSV** para análises e documentação
 
 ---
 
-## 🚀 Início Rápido
+## ✨ Funcionalidades Principais
+
+### 🏭 Produção
+- **8 Etapas Hierárquicas**: Preparação → Moldagem → Fundição → Resfriamento → Desmoldagem → Acabamento → Inspeção → Expedição
+- **Sub-etapas com Checklist**: Controle detalhado de cada processo
+- **Status Automático**: Atualização inteligente do status das ordens
+- **Persistência Completa**: Dados salvos localmente com Hive
+- **Sincronização Multi-usuário**: Acesso compartilhado em tempo real
+
+### 🧪 Ligas Metalúrgicas
+- **21 Ligas Pré-cadastradas**: SAE (10), ASTM (5), DIN/EN 1706 (4), AA (3)
+- **Cálculo Automático**: Composição química com rendimento de forno
+- **Verificação de Estoque**: Integração com materiais disponíveis
+- **Histórico de Cálculos**: Persistência de cálculos anteriores
+- **Filtros por Norma**: SAE, ASTM, DIN, AA
+
+### 🔬 Correção Avançada
+- **Recálculo em Cascata**: Ajuste inteligente considerando impactos secundários
+- **Integração com Estoque**: Materiais disponíveis em tempo real
+- **Priorização Automática**: Elementos críticos primeiro
+- **Otimização de Custos**: Menor custo total de correção
+- **Sistema de Diluição**: Suporte para diluição com sucata
+
+### 📦 Materiais
+- **Gestão de Estoque**: Controle completo de materiais
+- **Alertas de Estoque Mínimo**: Notificações automáticas
+- **Histórico de Movimentações**: Rastreabilidade completa
+- **Custos Unitários**: Cálculo de custos de produção
+
+### 👥 Gestão de Usuários
+- **5 Níveis de Permissão**:
+  - 🌟🌟🌟🌟🌟 Administrador Master (acesso total)
+  - 🌟🌟🌟🌟 Gerente de Produção
+  - 🌟🌟🌟🌟 Analista Metalúrgico
+  - 🌟🌟🌟 Operador de Produção
+  - 🌟🌟 Assistente Operacional
+- **CRUD Completo**: Criar, editar, visualizar e excluir usuários
+- **Middleware de Proteção**: Segurança em todas as rotas
+
+### 📊 Relatórios
+- **Exportação PDF**: Relatórios profissionais
+- **Exportação CSV**: Para análise em Excel
+- **Análises Espectrométricas**: Documentação técnica
+- **Ordens de Produção**: Rastreabilidade completa
+
+---
+
+## 🚀 Tecnologias Utilizadas
+
+### Core
+- **Flutter 3.35.4** (FIXO - não atualizar)
+- **Dart 3.9.2** (FIXO - não atualizar)
+- **Material Design 3**
+
+### State Management & Storage
+- **Provider 6.1.5+1** - Gerenciamento de estado
+- **Hive 2.2.3** - Banco de dados local (document DB)
+- **Hive Flutter 1.1.0** - Integração Flutter
+- **Shared Preferences 2.5.3** - Armazenamento key-value
+
+### Firebase (Opcional)
+- **Firebase Core 3.6.0**
+- **Cloud Firestore 5.4.3**
+- **Firebase Auth 5.3.1**
+- **Firebase Storage 12.3.2**
+
+### UI & Utilities
+- **FL Chart 0.69.2** - Gráficos
+- **Intl 0.19.0** - Internacionalização
+- **HTTP 1.5.0** - Requisições HTTP
+- **PDF 3.11.1** - Geração de PDFs
+- **CSV 6.0.0** - Exportação CSV
+
+---
+
+## 📥 Instalação e Configuração
 
 ### Pré-requisitos
+- Flutter 3.35.4 (OBRIGATÓRIO - não use versões diferentes)
+- Dart 3.9.2 (OBRIGATÓRIO - não use versões diferentes)
+- Git
 
-- Flutter 3.35.4 ou superior
-- Dart 3.9.2 ou superior
-- Android SDK (API Level 24+)
-- Java 17 (OpenJDK 17.0.2)
+### Passo a Passo
 
-### Instalação
-
+1. **Clone o repositório:**
 ```bash
-# 1. Clone o repositório (ou extraia o backup)
-# Se você tem o arquivo .tar.gz ou .zip:
-tar -xzf fundicaopro-erp-completo.tar.gz
-# ou
-unzip fundicaopro-erp-completo.zip
+git clone https://github.com/cmelodm/FUNDICAO_ERP.git
+cd FUNDICAO_ERP
+```
 
-# 2. Entre no diretório do projeto
-cd flutter_app
-
-# 3. Instale as dependências
+2. **Instale as dependências:**
+```bash
 flutter pub get
-
-# 4. Execute o projeto
-flutter run
 ```
 
-### Preview Web
+3. **Execute a aplicação:**
 
+**Web (Chrome):**
 ```bash
-# Build para web
+flutter run -d chrome
+```
+
+**Web Release (Produção):**
+```bash
 flutter build web --release
-
-# Servir com Python
 python3 -m http.server 5060 --directory build/web --bind 0.0.0.0
-
-# Acesse: http://localhost:5060
 ```
 
-### Compilar APK Android
-
-```bash
-# APK Release
-flutter build apk --release
-
-# APK localizado em:
-# build/app/outputs/flutter-apk/app-release.apk
+4. **Acesse no navegador:**
+```
+http://localhost:5060
 ```
 
 ---
 
 ## 👤 Usuários de Teste
 
-| Nível | E-mail | Senha | Permissões |
-|-------|--------|-------|------------|
-| **Administrador** | admin@fundicaopro.com.br | admin123 | Acesso total + gestão de usuários |
-| **Gerente** | gerente@fundicaopro.com.br | gerente123 | Gestão operacional e relatórios |
-| **Operador** | operador@fundicaopro.com.br | operador123 | Operações do dia a dia |
-| **Visualizador** | visualizador@fundicaopro.com.br | visualizador123 | Apenas consulta |
+### Administrador Master
+- **Email:** `admin@fundicaopro.com.br`
+- **Senha:** `admin123`
+- **Acesso:** Total (5 estrelas)
+
+### Gerente de Produção
+- **Email:** `gerente@fundicaopro.com.br`
+- **Senha:** `gerente123`
+- **Acesso:** Gestão + Relatórios (4 estrelas)
+
+### Analista Metalúrgico
+- **Email:** `analista@fundicaopro.com.br`
+- **Senha:** `analista123`
+- **Acesso:** Análises + Correções (4 estrelas)
+
+### Operador de Produção
+- **Email:** `operador@fundicaopro.com.br`
+- **Senha:** `operador123`
+- **Acesso:** Produção + Materiais (3 estrelas)
 
 ---
 
-## 📦 Módulos do Sistema
+## 📚 Documentação
 
-### 1. 🔐 Autenticação e Usuários
-- Login com e-mail/senha
-- 4 Níveis de acesso (Admin, Gerente, Operador, Visualizador)
-- CRUD completo de usuários
-- Alteração de senha
-- Controle de permissões por tela
+### Arquivos de Documentação Inclusos
 
-### 2. 📊 Dashboard
-- Estatísticas em tempo real
-- Gráficos interativos
-- Alertas de estoque
-- Indicadores de produção
-- Resumo de ordens (compra/venda/produção)
+- **[LEIA_PRIMEIRO.txt](LEIA_PRIMEIRO.txt)** - Guia de início rápido
+- **[CONTINUIDADE_PROJETO.md](CONTINUIDADE_PROJETO.md)** - Guia completo de restauração
+- **[DOCUMENTACAO_TECNICA.md](DOCUMENTACAO_TECNICA.md)** - Detalhes técnicos do sistema
+- **[DOCUMENTACAO_LIGAS_METALURGICAS.md](DOCUMENTACAO_LIGAS_METALURGICAS.md)** - Biblioteca de ligas (36 KB, 1.228 linhas)
+- **[LINK_DOWNLOAD_PROJETO.txt](LINK_DOWNLOAD_PROJETO.txt)** - Download do backup completo
 
-### 3. 📦 Materiais e Estoque
-- CRUD completo de materiais
-- Controle de estoque (entrada/saída)
-- Alertas de estoque mínimo
-- Histórico de movimentações
-- Rastreabilidade NCM, ICMS, IPI
+### Documentação Online
 
-### 4. 🏭 Ordens de Produção
-- Kanban visual por status
-- Formulário completo "Nova Ordem"
-- Seleção de materiais com validação de estoque
-- Cálculo automático de custo estimado
-- Controle de etapas de produção
-- Baixa automática de estoque ao concluir
-
-### 5. 🛒 Ordens de Compra
-- Gestão completa de compras
-- Integração com fornecedores
-- Recebimento de materiais
-- Atualização automática de estoque
-
-### 6. 💰 Ordens de Venda
-- Gestão completa de vendas
-- Faturamento com validação de estoque
-- Emissão de nota fiscal
-- Baixa automática de estoque
-- Rastreamento de entrega
-
-### 7. 👥 Fornecedores
-- CRUD completo
-- Avaliação de desempenho (4 critérios)
-- Histórico de avaliações
-- Integração com ordens de compra
-
-### 8. 🔬 Ligas Metalúrgicas
-- **19 Ligas Padrão Cadastradas:**
-  - 6 Ligas SAE (303, 305, 306, 309, 323, 329)
-  - 2 Ligas ASTM (A356, A357)
-  - 4 Ligas DIN/EN 1706
-  - 7 Ligas AA (201.0, 319.0, 380.0, 383.0, 413.0, 443.0, 514.0)
-- Criação de ligas personalizadas
-- Composição química detalhada
-
-### 9. 🧪 Análise Espectrométrica
-- Registro de análises químicas
-- Comparação com especificação da liga
-- Detecção automática de não-conformidades
-- Parser XML de equipamentos
-- **Cálculo de correção de liga**
-
-### 10. ✅ Controle de Qualidade
-- Registro de inspeções
-- Tipos de teste configuráveis
-- Resultados: Aprovado/Reprovado/Retrabalho
-- Registro de não-conformidades
-- Gestão de equipamentos e inspetores
-
-### 11. 📄 Notas Fiscais
-- Parser XML de NF-e completo
-- Importação automática de dados
-- Visualização detalhada
-- Extração de itens da nota
-
-### 12. 📈 Relatórios
-- **Tipos de Relatório:**
-  - Materiais
-  - Produção
-  - Fornecedores
-  - Qualidade
-  - Análises Espectrométricas
-  - Notas Fiscais
-- **Formatos:** PDF e CSV
+- [Flutter Documentation](https://docs.flutter.dev)
+- [Hive Documentation](https://docs.hivedb.dev)
+- [Provider Documentation](https://pub.dev/packages/provider)
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
-
-| Tecnologia | Versão | Propósito |
-|------------|--------|-----------|
-| **Flutter** | 3.35.4 | Framework multiplataforma |
-| **Dart** | 3.9.2 | Linguagem de programação |
-| **Firebase Core** | 3.6.0 | Backend as a Service |
-| **Firebase Auth** | 5.3.1 | Autenticação |
-| **Firestore** | 5.4.3 | Banco de dados NoSQL |
-| **Firebase Storage** | 12.3.2 | Armazenamento de arquivos |
-| **Provider** | 6.1.5+1 | Gerenciamento de estado |
-| **PDF** | 3.11.1 | Geração de relatórios |
-| **FL Chart** | 0.69.0 | Gráficos |
-| **File Picker** | 8.1.4 | Seleção de arquivos |
-| **HTTP** | 1.5.0 | Requisições REST |
-| **Intl** | 0.19.0 | Internacionalização |
-| **XML** | 6.5.0 | Parser de NF-e |
-
----
-
-## 📁 Estrutura do Projeto
+## 🏗️ Arquitetura do Projeto
 
 ```
-flutter_app/
+foundry_erp/
 ├── lib/
-│   ├── main.dart                   # Ponto de entrada
-│   ├── models/                     # 13 Modelos de dados
-│   ├── screens/                    # 15 Telas principais
-│   ├── services/                   # 5 Serviços
-│   ├── widgets/                    # Componentes reutilizáveis
-│   ├── providers/                  # Provedores de estado
-│   └── utils/                      # Utilitários
-├── android/                        # Configuração Android
-├── web/                            # Configuração Web
-├── test/                           # Testes automatizados
-├── pubspec.yaml                    # Dependências
-└── README.md                       # Este arquivo
+│   ├── main.dart                    # Entry point
+│   ├── models/                      # Modelos de dados
+│   │   ├── usuario_model.dart
+│   │   ├── permissao_model.dart
+│   │   ├── ordem_producao_model.dart
+│   │   ├── etapa_producao_model.dart
+│   │   ├── material_model.dart
+│   │   ├── liga_metalurgica_model.dart
+│   │   └── analise_espectrometrica.dart
+│   ├── screens/                     # Telas principais
+│   │   ├── login_screen.dart
+│   │   ├── dashboard_screen.dart
+│   │   ├── producao_screen.dart
+│   │   ├── producao_etapas_screen.dart
+│   │   ├── materiais_screen.dart
+│   │   ├── ligas_screen.dart
+│   │   ├── correcao_avancada_screen.dart
+│   │   ├── gestao_screen.dart
+│   │   └── relatorios_screen.dart
+│   ├── services/                    # Lógica de negócio
+│   │   ├── data_service.dart
+│   │   ├── storage_service.dart
+│   │   ├── correcao_avancada_service.dart
+│   │   ├── liga_templates_service.dart
+│   │   └── pdf_export_service.dart
+│   └── widgets/                     # Componentes reutilizáveis
+│       ├── permissao_widget.dart
+│       └── ordem_producao_card.dart
+├── android/                         # Configuração Android
+├── web/                             # Configuração Web
+├── test/                            # Testes unitários
+└── pubspec.yaml                     # Dependências
 ```
 
 ---
 
-## 🔄 Fluxos Principais
+## 🔧 Build APK/AAB (Android)
 
-### Fluxo Completo: Compra → Estoque → Produção → Venda
-
-```
-1. COMPRA
-   ├── Criar Ordem de Compra
-   ├── Selecionar Fornecedor
-   ├── Aguardar Entrega
-   └── ✅ Receber Materiais (Estoque +)
-
-2. PRODUÇÃO
-   ├── Criar Ordem de Produção
-   ├── Selecionar Materiais
-   ├── Executar Etapas
-   ├── Inspeção de Qualidade
-   └── ✅ Produto Concluído
-
-3. VENDA
-   ├── Criar Ordem de Venda
-   ├── Verificar Estoque
-   ├── Faturar Ordem
-   ├── Emitir NF de Saída
-   └── ✅ Estoque Atualizado (-)
-```
-
----
-
-## 🧪 Testes
-
+### Build APK (Debug)
 ```bash
-# Executar todos os testes
-flutter test
-
-# Executar testes específicos
-flutter test test/models/material_model_test.dart
-
-# Testes com cobertura
-flutter test --coverage
+flutter build apk --debug
 ```
 
----
+### Build APK (Release)
+```bash
+flutter build apk --release
+```
 
-## 📊 Estatísticas
+### Build AAB (Google Play Store)
+```bash
+flutter build appbundle --release
+```
 
-| Métrica | Valor |
-|---------|-------|
-| **Arquivos Dart** | 50+ |
-| **Linhas de Código** | ~15.000 |
-| **Modelos de Dados** | 13 |
-| **Telas Principais** | 15 |
-| **Serviços** | 5 |
-| **Ligas Padrão** | 19 |
-| **Funcionalidades** | 30+ |
-
----
-
-## 📱 Plataformas Suportadas
-
-| Plataforma | Status |
-|------------|--------|
-| ✅ **Android** | Completo (APK 54.5MB) |
-| ✅ **Web** | Completo (Preview disponível) |
-| ⚠️ **iOS** | Requer configuração |
-| ⚠️ **Windows** | Em desenvolvimento |
-| ⚠️ **Linux** | Em desenvolvimento |
-| ⚠️ **macOS** | Requer configuração |
+**Localização dos builds:**
+- APK Debug: `build/app/outputs/flutter-apk/app-debug.apk`
+- APK Release: `build/app/outputs/flutter-apk/app-release.apk`
+- AAB Release: `build/app/outputs/bundle/release/app-release.aab`
 
 ---
 
-## 🔮 Roadmap Futuro
+## ⚠️ Avisos Importantes
 
-### Fase 4: Integrações Avançadas
-- [ ] API REST para integrações
-- [ ] Integração com ERP externo
-- [ ] Sincronização com sistema financeiro
-- [ ] Marketplace B2B
+### Versões Fixas (NÃO ATUALIZAR)
+- ⛔ **NÃO execute** `flutter upgrade`
+- ⛔ **NÃO execute** `flutter pub upgrade`
+- ⛔ **NÃO atualize** Flutter além de 3.35.4
+- ⛔ **NÃO atualize** Dart além de 3.9.2
 
-### Fase 5: Analytics e BI
-- [ ] Dashboard de BI avançado
-- [ ] Predição de demanda (ML)
-- [ ] Análise preditiva de qualidade
-- [ ] Otimização de estoque (IA)
+**Motivo:** As versões foram testadas e são compatíveis. Atualizações podem quebrar dependências.
 
-### Fase 6: Mobilidade
-- [ ] App mobile nativo (iOS/Android)
-- [ ] Modo offline com sincronização
-- [ ] Leitura de QR Code / Barcode
-- [ ] Assinatura digital
+### Compatibilidade Web
+- ✅ Chrome (recomendado)
+- ✅ Firefox
+- ✅ Safari
+- ✅ Edge
+
+---
+
+## 🐛 Troubleshooting
+
+### Problema: "Exceção não tratada: MissingPluginException"
+**Solução:**
+```bash
+rm -rf build/web .dart_tool/build_cache
+flutter clean
+flutter pub get
+flutter build web --release
+```
+
+### Problema: "Erro de persistência Hive"
+**Solução:**
+Verifique se `storage_service.dart` está inicializado no `main.dart`:
+```dart
+await Hive.initFlutter();
+await StorageService().init();
+```
+
+### Problema: "Status da OP não atualiza"
+**Solução:**
+Verifique se `ProducaoScreen` usa `Consumer<DataService>`:
+```dart
+Consumer<DataService>(
+  builder: (context, dataService, child) {
+    // UI aqui
+  },
+)
+```
 
 ---
 
 ## 🤝 Contribuindo
 
-Este é um projeto proprietário. Para contribuições, entre em contato com a equipe de desenvolvimento.
+Contribuições são bem-vindas! Para contribuir:
+
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/MinhaFeature`)
+3. Commit suas mudanças (`git commit -m 'Adiciona MinhaFeature'`)
+4. Push para a branch (`git push origin feature/MinhaFeature`)
+5. Abra um Pull Request
 
 ---
 
 ## 📄 Licença
 
-Este projeto é proprietário e confidencial.
-
-**© 2024 FundiçãoPro ERP. Todos os direitos reservados.**
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
 
-## 📞 Suporte
+## 📧 Contato
 
-Para suporte técnico ou dúvidas:
+**Desenvolvedor:** Claude AI Assistant  
+**Versão:** 3.0 Final  
+**Data:** 09/12/2025  
+**Repositório:** [https://github.com/cmelodm/FUNDICAO_ERP](https://github.com/cmelodm/FUNDICAO_ERP)
 
-- 📧 E-mail: suporte@fundicaopro.com.br
-- 📱 Telefone: (XX) XXXX-XXXX
-- 🌐 Website: www.fundicaopro.com.br
+---
+
+## 🌟 Recursos Adicionais
+
+### Download Completo do Projeto
+- **Backup TAR.GZ:** [foundry_erp_completo_v3_final.tar.gz](https://www.genspark.ai/api/files/s/wJ7o02F4) (1.6 MB)
+
+### Ligas Metalúrgicas Disponíveis
+- **SAE:** 303, 305, 305 C, 305 I, 306, 308, 309, 319, 323, 329
+- **ASTM:** A356, A357, 380, 383, 413
+- **DIN/EN 1706:** AlSi7Mg, AlSi9Cu3, AlSi10Mg, AlSi12
+- **AA:** 356.0, 319.0, 443.0
+
+### Normas Técnicas Suportadas
+- **SAE J452** - Aluminum Casting Alloy Composition Limits
+- **ASTM B108** - Standard Specification for Aluminum-Alloy Permanent Mold Castings
+- **DIN EN 1706** - Aluminium and aluminium alloys - Castings
+- **AA Standards** - Aluminum Association Standards
 
 ---
 
 ## 🎉 Agradecimentos
 
-Desenvolvido com 💙 usando Flutter e Dart.
+Desenvolvido com ❤️ usando Flutter e Dart para a indústria de fundição.
 
-**Versão:** 1.0.0  
-**Data de Lançamento:** Dezembro 2024
-
----
-
-## 📚 Documentação Adicional
-
-Para documentação técnica completa, consulte:
-
-- **DOCUMENTACAO_TECNICA.md** - Documentação detalhada (200+ páginas)
-- **Arquitetura do Sistema**
-- **Guia de Desenvolvimento**
-- **API Reference**
-- **Troubleshooting Guide**
+**Foundry ERP v3.0 Final** - Sistema Profissional de Gestão Industrial
 
 ---
 
-**🚀 Pronto para transformar a gestão da sua fundição!**
+⭐ **Se este projeto foi útil para você, considere dar uma estrela!** ⭐
